@@ -1,0 +1,35 @@
+#Provide the subscription Id
+subscriptionId="IDdaAssinatura"
+
+#Provide the name of your resource group
+resourceGroupName="NomeGrupodeRecursos"
+
+#Provide the name of the Managed Disk
+managedDiskName="NomedoDisco"
+
+#Provide the OS type (Windows or Linux)
+osType=Windows
+
+#Provide the name of the virtual machine
+virtualMachineName="NomedaNovaVM"
+
+#Set the context to the subscription Id where Managed Disk exists and where VM will be created
+az account set --subscription $subscriptionId
+
+#Get the resource Id of the managed disk
+managedDiskId=$(az disk show --name $managedDiskName --resource-group $resourceGroupName --query [id] -o tsv)
+
+#Create VM by attaching existing managed disks as OS
+az vm create --name $virtualMachineName --resource-group $resourceGroupName --attach-os-disk $managedDiskId --os-type $osType
+
+______________________________________________________________________________________________________________________________
+#COMANDOS PARA AJUDAR ENCONTRAR OS RECURSOS CITADOS ACIMA
+
+#Para encontrar o ID da Assinatura
+az account list
+
+#Para listar os grupos de recursos existentes
+az group list
+
+#Para listar os discos
+az disk list
